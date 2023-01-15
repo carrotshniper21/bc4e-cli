@@ -8,8 +8,8 @@
 </div>
   
 # Run 
-  `git clone https://github.com/carrotshniper21/prn-cli.git`
+  `git clone https://github.com/carrotshniper21/bc4e-cli.git`
   
-  `cd prn-cli`
+  `cd bc4e-cli`
   
-  `python prn-cli.py`
+  `python bc4e-cli.py`
