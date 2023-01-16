@@ -48,13 +48,6 @@ def parse_args():
         action="store_true",
     )
     parser.add_argument(
-        "-a",
-        "--auto-update",
-        required=False,
-        dest="auto_update",
-        action="store_true",
-    )
-    parser.add_argument(
         "-v",
         "--vlc",
         required=False,
@@ -66,6 +59,34 @@ def parse_args():
         "--sources",
         required=False,
         dest="sources",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-g",
+        "--gogo",
+        required=False,
+        dest="gogoanime",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-z",
+        "--zoro",
+        required=False,
+        dest="zoro",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-p",
+        "--pahe",
+        required=False,
+        dest="animepahe",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-e",
+        "--enime",
+        required=False,
+        dest="enime",
         action="store_true",
     )
 
