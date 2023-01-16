@@ -28,6 +28,13 @@ def parse_args():
         action="store_true",
     )
     parser.add_argument(
+        "-u",
+        "--update",
+        required=False,
+        dest="update",
+        action="store_true",
+    )
+    parser.add_argument(
         "-C",
         "--continue",
         required=False,
