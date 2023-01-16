@@ -1,6 +1,7 @@
 """
 Main module for choosing a provider.
 """
+import time
 import getpass
 import subprocess
 from providers import zoro, enime, gogo, pahe
@@ -17,7 +18,9 @@ class Provider:
         self.default_provider = "zoro"
 
     def update(self):
+        subprocess.run(["git", "stash"])
         subprocess.run(["git", "pull", "https://github.com/carrotshniper21/bc4e-cli"])
+        print(util.colorcodes["Gray"] + "[*] Update Fetched" + util.colorcodes["Reset"])
 
 def main():
     """
@@ -39,6 +42,7 @@ def main():
     provider = None
     current_user = getpass.getuser()
     if provider is None:
+        time.sleep(1)
         subprocess.run(["clear"])
         print(util.colorcodes["Bold"] + f"Hello, {current_user}!\n" + util.colorcodes["Reset"])
         print(util.colorcodes["Gray"] + "[*] This script is still in development so there will be some bugs!\nif you find any report them to: https://github.com/carrotshniper21/bc4e-cli" + util.colorcodes["Reset"])
@@ -52,5 +56,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-sdfsdfsdf
+
