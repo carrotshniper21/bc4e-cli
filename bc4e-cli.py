@@ -16,6 +16,8 @@ class Provider:
         self.all_providers = ["zoro", "animepahe", "enime", "gogoanime"]
         self.default_provider = "zoro"
 
+    def update(self):
+        subprocess.run(["git", "pull", "https://github.com/carrotshniper21/bc4e-cli"])
 
 def main():
     """
@@ -32,6 +34,8 @@ def main():
         "gogoanime": gogo.main,
     }
     P = Provider()
+    if args.update:
+        P.update()
     provider = None
     current_user = getpass.getuser()
     if provider is None:
@@ -48,3 +52,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
