@@ -30,6 +30,7 @@ def main():
         zoro.main(quality='auto', history=False, download=False, continue=False, config=False, auto_update=False, vlc=False, sources=False)
     """
     args = parse_args()
+    current_user = getpass.getuser()
 
     providers = {
         "zoro": zoro.main,
@@ -42,16 +43,16 @@ def main():
         P.update()
         print(util.colorcodes["Gray"] + "[*] Update Fetched Successfully\n" + util.colorcodes["Reset"])
     provider = None
-    current_user = getpass.getuser()
+    if args.animepahe:
+        print(util.colorcodes["Bold"] + f"Hello, {current_user}!\n" + util.colorcodes["Reset"])
+        print(util.colorcodes["Gray"] + "[*] This script is still in development so there will be some bugs!\nif you find any report them to: https://github.com/carrotshniper21/bc4e-cli" + util.colorcodes["Reset"])
+        print(util.colorcodes["Gray"] + "[*] Chosen provider: animepahe" + util.colorcodes["Reset"])
+        providers["animepahe"](args)
     if provider is None:
         print(util.colorcodes["Bold"] + f"Hello, {current_user}!\n" + util.colorcodes["Reset"])
         print(util.colorcodes["Gray"] + "[*] This script is still in development so there will be some bugs!\nif you find any report them to: https://github.com/carrotshniper21/bc4e-cli" + util.colorcodes["Reset"])
         print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + "No provider chosen choosing default\n")
         providers[P.default_provider](args)
-    elif provider is not None:
-        print(util.colorcodes["Bold"] + f"Hello, {current_user}!\n" + util.colorcodes["Reset"])
-        print(util.colorcodes["Gray"] + "[*] This script is still in development so there will be some bugs!\nif you find any report them to: https://github.com/carrotshniper21/bc4e-cli" + util.colorcodes["Reset"])
-        providers[provider](args)
 
 
 if __name__ == "__main__":
