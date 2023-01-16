@@ -20,8 +20,10 @@ class Provider:
     def update(self):
         result = subprocess.run(['git', 'stash'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         result2 = subprocess.run(["git", "pull", "https://github.com/carrotshniper21/bc4e-cli"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.run(["clear"])
 
 def main():
+    subprocess.run(["clear"])
     """
     Passes the arguments to the chosen provider
     would kinda look like this:
@@ -38,12 +40,10 @@ def main():
     P = Provider()
     if args.update:
         P.update()
+        print(util.colorcodes["Gray"] + "[*] Update Fetched Successfully\n" + util.colorcodes["Reset"])
     provider = None
     current_user = getpass.getuser()
     if provider is None:
-        time.sleep(1)
-        subprocess.run(["clear"])
-        print(util.colorcodes["Gray"] + "[*] Update Fetched Successfully\n" + util.colorcodes["Reset"])
         print(util.colorcodes["Bold"] + f"Hello, {current_user}!\n" + util.colorcodes["Reset"])
         print(util.colorcodes["Gray"] + "[*] This script is still in development so there will be some bugs!\nif you find any report them to: https://github.com/carrotshniper21/bc4e-cli" + util.colorcodes["Reset"])
         print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + "No provider chosen choosing default\n")
