@@ -18,9 +18,8 @@ class Provider:
         self.default_provider = "zoro"
 
     def update(self):
-        subprocess.run(["git", "stash"])
-        subprocess.run(["git", "pull", "https://github.com/carrotshniper21/bc4e-cli"])
-        print(util.colorcodes["Gray"] + "[*] Update Fetched" + util.colorcodes["Reset"])
+        result = subprocess.run(['git', 'stash'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result2 = subprocess.run(["git", "pull", "https://github.com/carrotshniper21/bc4e-cli"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def main():
     """
@@ -44,6 +43,7 @@ def main():
     if provider is None:
         time.sleep(1)
         subprocess.run(["clear"])
+        print(util.colorcodes["Gray"] + "[*] Update Fetched Successfully\n" + util.colorcodes["Reset"])
         print(util.colorcodes["Bold"] + f"Hello, {current_user}!\n" + util.colorcodes["Reset"])
         print(util.colorcodes["Gray"] + "[*] This script is still in development so there will be some bugs!\nif you find any report them to: https://github.com/carrotshniper21/bc4e-cli" + util.colorcodes["Reset"])
         print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + "No provider chosen choosing default\n")
@@ -56,4 +56,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
