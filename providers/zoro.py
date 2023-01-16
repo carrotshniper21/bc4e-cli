@@ -67,7 +67,8 @@ class ZoroClient:
                 input("{+} Please choose a episode 1-" + f"{number_of_episodes + 1}: ")
             )
         except ValueError:
-            print("{!} Invalid Choice")
+            print(util.colorcodes["Red"] + "[X] ERROR: " + util.colorcodes["Reset"] + "Invalid choice. Try Again.")
+            sys.exit()
 
         for episode in anime_data["episodes"]:
             if episode["number"] == episode_number:
@@ -87,6 +88,7 @@ class ZoroClient:
             qualities = [p["quality"] for p in anime_linkss["sources"]]
         except KeyError as e:
             print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
+            print(util.colorcodes["Gray"] + "[*] Usually if a 'sources' error occurs I would reccomend to try again. or use a diffrent provider" + util.colorcodes["Reset"])
             sys.exit()
         best_quality = choose_best_quality(qualities)
         try:
@@ -101,7 +103,11 @@ class ZoroClient:
                         stderr=subprocess.DEVNULL,
                     )
         except KeyboardInterrupt:
-            sys.exit()
+            clear_screen = input(util.colorcodes["Bold"] + "Clear the screen? Y/N " + util.colorcodes["Reset"])
+            if clear_screen.lower() == "y":
+                subprocess.run(["clear"])
+            if clear_screen.lower() == "n":
+                sys.exit()
 
 
     def get_anime_links(self, id, args):
@@ -124,6 +130,7 @@ class ZoroClient:
             links = [f'{q["url"]} {q["quality"]}' for q in anime_links["sources"]]
         except KeyError as e:
             print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
+            print(util.colorcodes["Gray"] + "[*] Usually if a 'sources' error occurs I would reccomend to try again. or use a diffrent provider" + util.colorcodes["Reset"])
             sys,exit()
         qualities = [p["quality"] for p in anime_links["sources"]]
         best_quality = choose_best_quality(qualities)
@@ -151,3 +158,5 @@ def main(args):
 
 if __name__ == "__main__":
     main()
+
+
