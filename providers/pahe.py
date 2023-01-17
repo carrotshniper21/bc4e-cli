@@ -29,7 +29,7 @@ class PaheClient:
 
     def parse_data(self):
         try:
-            query = input("{+} Enter A Anime Name: ")
+            query = input("[+] Enter A Anime Name: ")
             json_data = self.watch_pahe(query)
             if len(json_data["results"]) == 0:
                 print("{!} No Results Found")
