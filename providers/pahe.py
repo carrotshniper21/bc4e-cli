@@ -47,7 +47,7 @@ class PaheClient:
 
         return id, name
 
-    def handle_shows(self, anime_data):
+    def handle_shows(self, anime_data, args):
         number_of_episodes = -1
         for episode in anime_data["episodes"]:
             number_of_episodes += 1
@@ -56,7 +56,7 @@ class PaheClient:
                 input("{+} Please choose a episode 1-" + f"{number_of_episodes + 1}: ")
             )
         except ValueError:
-            print("{!} Invalid Choice")
+            print(util.colorcodes["Red"] + "[X] ERROR: " + util.colorcodes["Reset"] + "Invalid choice. Try Again.")
             sys.exit()
 
         for episode in anime_data["episodes"]:
@@ -64,22 +64,27 @@ class PaheClient:
                 selected_episode = episode
                 _id = selected_episode["id"]
                 _title = selected_episode["title"]
+                _episode_number = selected_episode["number"]
 
         a = requests.get(
             f"{self.BASE_URL}watch/{_id}"
         )
         anime_links = json.loads(a.text)
+        if args.sources:
+            print(anime_links)
         try:
             links = [f'{q["url"]} {q["quality"]}' for q in anime_links["sources"]]
         except KeyError as e:
-            print("{!} An error occured: " + f"{e}")
-            exit()
+            print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
+            print(util.colorcodes["Gray"] + "[*] Usually if a 'sources' error occurs I would reccomend to try again. or use a diffrent provider" + util.colorcodes["Reset"])
+            sys.exit()
         qualities = [p["quality"] for p in anime_links["sources"]]
         best_quality = choose_best_quality(qualities)
         try:
             for link in links:
                 if best_quality in link:
                     link = link.split()[0]
+                    print(f"Now Playing 'Episode {_episode_number} {_title}'")
                     print("{+} Press Ctrl+C to exit the program")
                     result = subprocess.run(
                         ["mpv", "--fs", f"{link}", f"--title={_title}"],
@@ -93,18 +98,25 @@ class PaheClient:
         f = requests.get(f"{self.BASE_URL}info/{id}")
         return json.loads(f.text)
 
-    def get_anime_links(self, id):
+    def get_anime_links(self, id, args):
         anime_data = self.get_anime_info(id)
         anime_id = [f'{d["id"]}' for d in anime_data["episodes"]]
         if len(anime_id) != 1:
-            self.handle_shows(anime_data)
+            self.handle_shows(anime_data, args)
 
         return anime_id
 
     def get_episodes(self, anime_id, name):
         h = requests.get(f"{self.BASE_URL}watch/{anime_id[0]}")
         anime_links = json.loads(h.text)
-        links = [f'{q["url"]} {q["quality"]}' for q in anime_links["sources"]]
+        if args.sources:
+            print(anime_links)
+        try:
+            links = [f'{q["url"]} {q["quality"]}' for q in anime_links["sources"]]
+        except KeyError as e:
+            print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
+            print(util.colorcodes["Gray"] + "[*] Usually if a 'sources' error occurs I would reccomend to try again. or use a diffrent provider" + util.colorcodes["Reset"])
+            sys.exit()
         qualities = [p["quality"] for p in anime_links["sources"]]
         best_quality = choose_best_quality(qualities)
         try:
@@ -120,12 +132,12 @@ class PaheClient:
         except KeyboardInterrupt:
             sys.exit()
 
-def main():
+def main(args):
     pahe_client = PaheClient()
     id, name = pahe_client.parse_data()
     pahe_client.get_anime_info(id)
-    anime_id = pahe_client.get_anime_links(id)
-    pahe_client.get_episodes(anime_id, name)
+    anime_id = pahe_client.get_anime_links(id, args)
+    pahe_client.get_episodes(anime_id, name, args)
 
 if __name__ == "__main__":
     main()
