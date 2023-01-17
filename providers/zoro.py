@@ -131,7 +131,7 @@ class ZoroClient:
         except KeyError as e:
             print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
             print(util.colorcodes["Gray"] + "[*] Usually if a 'sources' error occurs I would reccomend to try again. or use a diffrent provider" + util.colorcodes["Reset"])
-            sys,exit()
+            sys.exit()
         qualities = [p["quality"] for p in anime_links["sources"]]
         best_quality = choose_best_quality(qualities)
         try:
@@ -158,5 +158,3 @@ def main(args):
 
 if __name__ == "__main__":
     main()
-
-
