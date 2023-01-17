@@ -85,12 +85,15 @@ class ZoroClient:
             print(anime_linkss)
         try:
             links = [f'{qq["url"]} {qq["quality"]}' for qq in anime_linkss["sources"]]
+            subtitle_data = [f'{pp["url"]}' for pp in anime_linkss["subtitles"]]
             qualities = [p["quality"] for p in anime_linkss["sources"]]
         except KeyError as e:
             print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
             print(util.colorcodes["Gray"] + "[*] Usually if a 'sources' error occurs I would reccomend to try again. or use a diffrent provider" + util.colorcodes["Reset"])
             sys.exit()
         best_quality = choose_best_quality(qualities)
+        for subtitle_file in subtitle_data:
+            subtitles = '--sub-file=' + subtitle_file
         try:
             for link in links:
                 if best_quality in link:
@@ -98,7 +101,7 @@ class ZoroClient:
                     print(f"Now Playing 'Episode {_episode_number} {_title}'")
                     print("{+} Press Ctrl+C to exit the program")
                     result = subprocess.run(
-                        ["mpv", "--fs", f"{link}", f"--title={_title}"],
+                        ["mpv", "--fs", f"{link}", f"--title={_title}", f"{subtitles}"],
                         stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL,
                     )
@@ -158,3 +161,4 @@ def main(args):
 
 if __name__ == "__main__":
     main()
+
