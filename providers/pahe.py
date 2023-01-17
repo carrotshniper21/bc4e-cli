@@ -53,7 +53,7 @@ class PaheClient:
             number_of_episodes += 1
         try:
             episode_number = int(
-                input("{+} Please choose a episode 1-" + f"{number_of_episodes + 1}: ")
+                input("[+] Please choose a episode 1-" + f"{number_of_episodes + 1}: ")
             )
         except ValueError:
             print(util.colorcodes["Red"] + "[X] ERROR: " + util.colorcodes["Reset"] + "Invalid choice. Try Again.")
@@ -75,7 +75,7 @@ class PaheClient:
         try:
             links = [f'{q["url"]} {q["quality"]}' for q in anime_links["sources"]]
         except KeyError as e:
-            print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
+            print(util.colorcodes["Red"] + "[X] ERROR: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
             print(util.colorcodes["Gray"] + "[*] Usually if a 'sources' error occurs I would reccomend to try again. or use a diffrent provider" + util.colorcodes["Reset"])
             sys.exit()
         qualities = [p["quality"] for p in anime_links["sources"]]
@@ -84,15 +84,19 @@ class PaheClient:
             for link in links:
                 if best_quality in link:
                     link = link.split()[0]
-                    print(f"Now Playing 'Episode {_episode_number} {_title}'")
-                    print("{+} Press Ctrl+C to exit the program")
+                    print(util.colorcodes["Green"] + "[*] SUCCESS: " + util.colorcodes["Reset"] + f"Now Playing 'Episode {_episode_number} {_title}'")
+                    print("[+] Press Ctrl+C to exit the program")
                     result = subprocess.run(
                         ["mpv", "--fs", f"{link}", f"--title={_title}"],
                         stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL,
                     )
         except KeyboardInterrupt:
-            sys.exit()
+            clear_screen = input(util.colorcodes["Bold"] + "\n[*] Clear the screen? Y/N " + util.colorcodes["Reset"])
+            if clear_screen.lower() == "y":
+                subprocess.run(["clear"])
+            if clear_screen.lower() == "n":
+                sys.exit()
 
     def get_anime_info(self, id):
         f = requests.get(f"{self.BASE_URL}info/{id}")
@@ -114,7 +118,7 @@ class PaheClient:
         try:
             links = [f'{q["url"]} {q["quality"]}' for q in anime_links["sources"]]
         except KeyError as e:
-            print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
+            print(util.colorcodes["Red"] + "[X] ERROR: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
             print(util.colorcodes["Gray"] + "[*] Usually if a 'sources' error occurs I would reccomend to try again. or use a diffrent provider" + util.colorcodes["Reset"])
             sys.exit()
         qualities = [p["quality"] for p in anime_links["sources"]]
@@ -123,6 +127,7 @@ class PaheClient:
             for link in links:
                 if best_quality in link:
                     link = link.split()[0]
+                    print(util.colorcodes["Green"] + "[*] SUCCESS: " + util.colorcodes["Reset"] + f"Now Playing '{_title}'")
                     print("[+] Press Ctrl+C to exit the program")
                     subprocess.run(
                         ["mpv", "--fs", f"{link}", f"--title={name.rsplit(' ', 1)[0]}"],
@@ -130,7 +135,11 @@ class PaheClient:
                         stderr=subprocess.DEVNULL,
                     )
         except KeyboardInterrupt:
-            sys.exit()
+            clear_screen = input(util.colorcodes["Bold"] + "\n[*] Clear the screen? Y/N " + util.colorcodes["Reset"])
+            if clear_screen.lower() == "y":
+                subprocess.run(["clear"])
+            if clear_screen.lower() == "n":
+                sys.exit()
 
 def main(args):
     pahe_client = PaheClient()
