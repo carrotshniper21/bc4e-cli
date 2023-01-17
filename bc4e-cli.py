@@ -46,7 +46,7 @@ def main():
     if args.animepahe:
         print(util.colorcodes["Bold"] + f"Hello, {current_user}!\n" + util.colorcodes["Reset"])
         print(util.colorcodes["Gray"] + "[*] This script is still in development so there will be some bugs!\nif you find any report them to: https://github.com/carrotshniper21/bc4e-cli" + util.colorcodes["Reset"])
-        print(util.colorcodes["Gray"] + "[*] Chosen provider: animepahe" + util.colorcodes["Reset"])
+        print(util.colorcodes["Gray"] + "[*] Chosen provider: " + util.colorcodes["Reset"] + util.colorcodes["Bold"] + "animepahe\n" + util.colorcodes["Reset"])
         providers["animepahe"](args)
     if provider is None:
         print(util.colorcodes["Bold"] + f"Hello, {current_user}!\n" + util.colorcodes["Reset"])
