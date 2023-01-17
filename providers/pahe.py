@@ -86,15 +86,16 @@ class PaheClient:
                     link = link.split()[0]
                     print(util.colorcodes["Green"] + "[*] SUCCESS: " + util.colorcodes["Reset"] + f"Now Playing 'Episode {_episode_number} {_title}'")
                     print("[+] Press Ctrl+C to exit the program")
-                    result = subprocess.run(
-                        ["mpv", "--fs", f"{link}", f"--title={_title}"],
-                        stdout=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL,
-                    )
+                        result = subprocess.run(
+                            ["mpv", f"{link}", f"--title={_title}"],
+                            stdout=subprocess.DEVNULL,
+                            stderr=subprocess.DEVNULL,
+                        )
         except KeyboardInterrupt:
             clear_screen = input(util.colorcodes["Bold"] + "\n[*] Clear the screen? Y/N " + util.colorcodes["Reset"])
             if clear_screen.lower() == "y":
                 subprocess.run(["clear"])
+                sys.exit()
             if clear_screen.lower() == "n":
                 sys.exit()
 
@@ -110,7 +111,7 @@ class PaheClient:
 
         return anime_id
 
-    def get_episodes(self, anime_id, name):
+    def get_episodes(self, anime_id, name, args):
         h = requests.get(f"{self.BASE_URL}watch/{anime_id[0]}")
         anime_links = json.loads(h.text)
         if args.sources:
@@ -130,7 +131,7 @@ class PaheClient:
                     print(util.colorcodes["Green"] + "[*] SUCCESS: " + util.colorcodes["Reset"] + f"Now Playing '{_title}'")
                     print("[+] Press Ctrl+C to exit the program")
                     subprocess.run(
-                        ["mpv", "--fs", f"{link}", f"--title={name.rsplit(' ', 1)[0]}"],
+                        ["mpv", f"{link}", f"--title={name.rsplit(' ', 1)[0]}"],
                         stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL,
                     )
@@ -138,6 +139,7 @@ class PaheClient:
             clear_screen = input(util.colorcodes["Bold"] + "\n[*] Clear the screen? Y/N " + util.colorcodes["Reset"])
             if clear_screen.lower() == "y":
                 subprocess.run(["clear"])
+                sys.exit()
             if clear_screen.lower() == "n":
                 sys.exit()
 
@@ -150,3 +152,5 @@ def main(args):
 
 if __name__ == "__main__":
     main()
+
+
