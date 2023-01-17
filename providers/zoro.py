@@ -32,10 +32,10 @@ class ZoroClient:
 
     def parse_data(self):
         try:
-            query = input("{+} Enter a anime name: ")
+            query = input("[+] Enter a anime name: ")
             json_data = self.watch_zoro(query)
             if len(json_data["results"]) == 0:
-                print("{!} No Results Found")
+                print(util.colorcodes["Red"] + "[X] ERROR: " + util.colorcodes["Reset"] + "No Results Found")
                 exit()
             else:
                 strings = [
@@ -64,7 +64,7 @@ class ZoroClient:
             number_of_episodes += 1
         try:
             episode_number = int(
-                input("{+} Please choose a episode 1-" + f"{number_of_episodes + 1}: ")
+                input("[+] Please choose a episode 1-" + f"{number_of_episodes + 1}: ")
             )
         except ValueError:
             print(util.colorcodes["Red"] + "[X] ERROR: " + util.colorcodes["Reset"] + "Invalid choice. Try Again.")
@@ -88,7 +88,7 @@ class ZoroClient:
             subtitle_data = [f'{pp["url"]}' for pp in anime_linkss["subtitles"]]
             qualities = [p["quality"] for p in anime_linkss["sources"]]
         except KeyError as e:
-            print(util.colorcodes["Yellow"] + "[!] WARNING: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
+            print(util.colorcodes["Red"] + "[X] ERROR: " + util.colorcodes["Reset"] + f"An error occured: {e} Exiting...")
             print(util.colorcodes["Gray"] + "[*] Usually if a 'sources' error occurs I would reccomend to try again. or use a diffrent provider" + util.colorcodes["Reset"])
             sys.exit()
         best_quality = choose_best_quality(qualities)
@@ -98,15 +98,15 @@ class ZoroClient:
             for link in links:
                 if best_quality in link:
                     link = link.split()[0]
-                    print(f"Now Playing 'Episode {_episode_number} {_title}'")
-                    print("{+} Press Ctrl+C to exit the program")
+                    print(util.colorcodes["Green"] + "[*] SUCCESS: " + util.colorcodes["Reset"] + f"Now Playing 'Episode {_episode_number} {_title}'")
+                    print("[+] Press Ctrl+C to exit the program")
                     result = subprocess.run(
                         ["mpv", "--fs", f"{link}", f"--title={_title}", f"{subtitles}"],
                         stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL,
                     )
         except KeyboardInterrupt:
-            clear_screen = input(util.colorcodes["Bold"] + "Clear the screen? Y/N " + util.colorcodes["Reset"])
+            clear_screen = input(util.colorcodes["Bold"] + "\n[*] Clear the screen? Y/N " + util.colorcodes["Reset"])
             if clear_screen.lower() == "y":
                 subprocess.run(["clear"])
             if clear_screen.lower() == "n":
@@ -149,8 +149,11 @@ class ZoroClient:
                         stderr=subprocess.DEVNULL,
                     )
         except KeyboardInterrupt:
-            sys.exit()
-
+            clear_screen = input(util.colorcodes["Bold"] + "\n[*] Clear the screen? Y/N " + util.colorcodes["Reset"])
+            if clear_screen.lower() == "y":
+                subprocess.run(["clear"])
+            if clear_screen.lower() == "n":
+                sys.exit()
 
 def main(args):
     zoro_client = ZoroClient()
@@ -161,4 +164,3 @@ def main(args):
 
 if __name__ == "__main__":
     main()
-
